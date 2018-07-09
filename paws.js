@@ -1,119 +1,25 @@
-var jsonPets = {
-    'dogs':[
-        {
-            'name':'Cookie',
-            'breed':'Chihuahua',
-            'sex':'Female',
-            'shots':true,
-            'age':'2014-7-7',
-            'size':'25',
-            'licensed':false,
-            'neutered':true,
-            'owners':'Owners List in Future Release.',
-            'notes':'Notes in Future Release.'
-        },
-        {
-            'name':'Brooke',
-            'breed':'Jack Russel',
-            'sex':'Male',
-            'shots':false,
-            'age':'2014-7-9',
-            'size':'15',
-            'licensed':true,
-            'neutered':false,
-            'owners':'Owners List in Future Release.',
-            'notes':'Notes in Future Release.'
-        },
-        {
-            'name':'Peanut',
-            'breed':'Terrier',
-            'sex':'Female',
-            'shots':true,
-            'age':'1995-7-3',
-            'size':'60',
-            'licensed':false,
-            'neutered':true,
-            'owners':'Owners List in Future Release.',
-            'notes':''
-        }
-    ],
-    'cats':[
-        {
-            'name':'Sasha',
-            'breed':'Siamese',
-            'sex':'Male',
-            'shots':true,
-            'age':'2013-5-3',
-            'declawed':false,
-            'neutered':true,
-            'owners':'Owners List in Future Release.',
-            'notes':'Notes in Future Release.'
-        },
-        {
-            'name':'Bella',
-            'breed':'Russian Blue',
-            'sex':'Female',
-            'shots':false,
-            'age':'2010-4-4',
-            'declawed':true,
-            'neutered':false,
-            'owners':'Owners List in Future Release.',
-            'notes':''
-        },
-        {
-            'name':'Nero',
-            'breed':'Siamese',
-            'sex':'Male',
-            'shots':false,
-            'age':'2003-5-6',
-            'declawed':true,
-            'neutered':true,
-            'owners':'',
-            'notes':'Notes in Future Release.'
-        }
-    ],
-    'exotics':[
-        {
-            'name':'Toffee',
-            'species':'Guinea Pig',
-            'sex':'Female',
-            'age':'2015-7-1',
-            'owners':'Owners List in Future Release.',
-            'notes':'Notes in Future Release.'
-        },
-        {
-            'name':'Jack',
-            'species':'Parakeet',
-            'sex':'Male',
-            'age':'2015-10-5',
-            'owners':'Owners List in Future Release.',
-            'notes':''
-        },
-        {
-            'name':'Roger',
-            'species':'Rabbit',
-            'sex':'Male',
-            'age':'1997-12-5',
-            'owners':'',
-            'notes':'Notes in Future Release.'
-        }
-    ]
+$().ready(callJson);
+
+function callJson(){
+$.getJSON('https://raw.githubusercontent.com/Muahahayes/paws/master/paws.json', function(json){
+    buildPage(json);
+});
 }
-$().ready(buildPage);
-function buildPage(){
-    buildTable();
+
+function buildPage(jsonPets){
+    buildTable(jsonPets);
     $('th').on('click',sortRows);
     $('.modal-btn').on('click', modalToggle);
 }
 
-function buildTable(){
+function buildTable(jsonPets){
     let species = $('body').attr('id');
-    if(species == 'dog'){buildDog();}
-    if(species == 'cat'){buildCat();}
-    if(species == 'exotic'){buildExotic();}
+    if(species == 'dog'){buildDog(jsonPets);}
+    if(species == 'cat'){buildCat(jsonPets);}
+    if(species == 'exotic'){buildExotic(jsonPets);}
 }
 
-function buildDog(){
+function buildDog(jsonPets){
     let dogHead = '<tbody><tr><th id="0">Name</th><th id="1">Breed</th><th id="2">Sex</th><th id="3">Shots</th><th id="4" class="numbers">Age</th><th id="5">Size</th><th id="6">Licensed</th><th id="7">Neutered</th><th id="8">Owners</th><th id="9">Notes</th></tr>';
     let dogTable = '';
     let dogModals = '';
@@ -182,7 +88,7 @@ function buildDog(){
     $('body').append(dogModals);
 }
 
-function buildCat(){
+function buildCat(jsonPets){
     let catHead = '<tbody><tr><th id="0">Name</th><th id="1">Breed</th><th id="2">Sex</th><th id="3">Shots</th><th id="4" class="numbers">Age</th><th id="5">Declawed</th><th id="6">Neutered</th><th id="7">Owners</th><th id="8">Notes</th></tr>';
     let catTable = '';
     let catModals = '';
@@ -238,7 +144,7 @@ function buildCat(){
     $('body').append(catModals);
 }
 
-function buildExotic(){
+function buildExotic(jsonPets){
     let exoticHead = '<tbody><tr><th id="0">Name</th><th id="1">Species</th><th id="2">Sex</th><th id="3" class="numbers">Age</th><th id="4">Owners</th><th id="5">Notes</th></tr>';
     let exoticTable = '';
     let exoticModals = '';
@@ -389,3 +295,104 @@ function sortRows(){
     $(this).on('click',reverseRows);
 }
 
+// var jsonPets = {
+//     'dogs':[
+//         {
+//             'name':'Cookie',
+//             'breed':'Chihuahua',
+//             'sex':'Female',
+//             'shots':true,
+//             'age':'2014-7-7',
+//             'size':'25',
+//             'licensed':false,
+//             'neutered':true,
+//             'owners':'Owners List in Future Release.',
+//             'notes':'Notes in Future Release.'
+//         },
+//         {
+//             'name':'Brooke',
+//             'breed':'Jack Russel',
+//             'sex':'Male',
+//             'shots':false,
+//             'age':'2014-7-9',
+//             'size':'15',
+//             'licensed':true,
+//             'neutered':false,
+//             'owners':'Owners List in Future Release.',
+//             'notes':'Notes in Future Release.'
+//         },
+//         {
+//             'name':'Peanut',
+//             'breed':'Terrier',
+//             'sex':'Female',
+//             'shots':true,
+//             'age':'1995-7-3',
+//             'size':'60',
+//             'licensed':false,
+//             'neutered':true,
+//             'owners':'Owners List in Future Release.',
+//             'notes':''
+//         }
+//     ],
+//     'cats':[
+//         {
+//             'name':'Sasha',
+//             'breed':'Siamese',
+//             'sex':'Male',
+//             'shots':true,
+//             'age':'2013-5-3',
+//             'declawed':false,
+//             'neutered':true,
+//             'owners':'Owners List in Future Release.',
+//             'notes':'Notes in Future Release.'
+//         },
+//         {
+//             'name':'Bella',
+//             'breed':'Russian Blue',
+//             'sex':'Female',
+//             'shots':false,
+//             'age':'2010-4-4',
+//             'declawed':true,
+//             'neutered':false,
+//             'owners':'Owners List in Future Release.',
+//             'notes':''
+//         },
+//         {
+//             'name':'Nero',
+//             'breed':'Siamese',
+//             'sex':'Male',
+//             'shots':false,
+//             'age':'2003-5-6',
+//             'declawed':true,
+//             'neutered':true,
+//             'owners':'',
+//             'notes':'Notes in Future Release.'
+//         }
+//     ],
+//     'exotics':[
+//         {
+//             'name':'Toffee',
+//             'species':'Guinea Pig',
+//             'sex':'Female',
+//             'age':'2015-7-1',
+//             'owners':'Owners List in Future Release.',
+//             'notes':'Notes in Future Release.'
+//         },
+//         {
+//             'name':'Jack',
+//             'species':'Parakeet',
+//             'sex':'Male',
+//             'age':'2015-10-5',
+//             'owners':'Owners List in Future Release.',
+//             'notes':''
+//         },
+//         {
+//             'name':'Roger',
+//             'species':'Rabbit',
+//             'sex':'Male',
+//             'age':'1997-12-5',
+//             'owners':'',
+//             'notes':'Notes in Future Release.'
+//         }
+//     ]
+// }
