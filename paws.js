@@ -3,9 +3,9 @@ let displayJson = [];
 let jsonPets = [];
 let key = "";
 function callJson(){
-$.getJSON('https://raw.githubusercontent.com/Muahahayes/paws/master/paws.json', function(json){
-    buildPage(json);
-});
+    $.getJSON('paws.json', function(json){ //https://raw.githubusercontent.com/Muahahayes/paws/master/paws.json
+        buildPage(json);
+    });
 }
 
 function buildPage(json){
@@ -24,7 +24,7 @@ function buildPage(json){
     }
     buildTable();
     $('th').on('click',sortRows);
-    $('.modal-btn').on('click', modalToggle);
+    $('th').addClass('sort');
 }
 
 function buildTable(){
@@ -38,22 +38,24 @@ function buildTable(){
     if(species == 'exotic'){
         buildExotic();
     }
+    $('.modal-btn').on('click', modalToggle);
+    
 }
 
 function buildDog(){
-    let dogHead = '<tbody><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age">Age</th><th id="size" class="numbers">Size</th><th id="licensed" class="bools">Licensed</th><th id="neutered" class="bools">Neutered</th><th id="owners">Owners</th><th id="notes">Notes</th></tr>';
+    let dogHead = '<tbody><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="size" class="numbers">Size</th><th id="licensed" class="bools">Licensed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
     let dogTable = '';
     let dogModals = '';
     let i = 1;
     for(let dog of displayJson){
-        let dogDate = new Date(dog.age);
-        let dogAge = Math.floor(((Date.now() - dogDate) / 86400000) / 365.25);
+        let dogDate = new Date(dog.birthday);
+        dog.age = Math.floor(((Date.now() - dogDate) / 86400000) / 365.25);
 
         dogTable += `<tr class="tdRow"><td>${dog.name}</td>
         <td>${dog.breed}</td>
         <td>${dog.sex}</td>
         <td>${(dog.shots)?'Yes':'No'}</td>
-        <td>${dogAge}</td>`;
+        <td>${dog.age}</td>`;
 
         if(dog.size < 20){
             dogTable += `<td>S</td>`;
@@ -110,21 +112,21 @@ function buildDog(){
 }
 
 function buildCat(){
-    let catHead = '<tbody><tr><th id="0">Name</th><th id="1">Breed</th><th id="2">Sex</th><th id="3">Shots</th><th id="4" class="numbers">Age</th><th id="5">Declawed</th><th id="6">Neutered</th><th id="7">Owners</th><th id="8">Notes</th></tr>';
+    let catHead = '<tbody><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="declawed" class="bools">Declawed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
     let catTable = '';
     let catModals = '';
     let i = 1;
 
     for(let cat of displayJson){
-        let catDate = new Date(cat.age);
-        let catAge = Math.floor(((Date.now() - catDate) / 86400000) / 365.25);
+        let catDate = new Date(cat.birthday);
+        cat.age = Math.floor(((Date.now() - catDate) / 86400000) / 365.25);
     
 
         catTable += `<tr class="tdRow"><td>${cat.name}</td>
         <td>${cat.breed}</td>
         <td>${cat.sex}</td>
         <td>${(cat.shots)?'Yes':'No'}</td>
-        <td>${catAge}</td>
+        <td>${cat.age}</td>
         <td>${(cat.declawed)?'Yes':'No'}</td>
         <td>${(cat.neutered)?'Yes':'No'}</td>`;
 
@@ -162,22 +164,22 @@ function buildCat(){
     catTable += `</tbody>`;
     catTable = catHead + catTable;
     $('.table').html(catTable);
-    $('body').append(catModals);
+    $('.modals').html(catModals);
 }
 
 function buildExotic(){
-    let exoticHead = '<tbody><tr><th id="0">Name</th><th id="1">Species</th><th id="2">Sex</th><th id="3" class="numbers">Age</th><th id="4">Owners</th><th id="5">Notes</th></tr>';
+    let exoticHead = '<tbody><tr><th id="name">Name</th><th id="species">Species</th><th id="sex">Sex</th><th id="age" class="numbers">Age</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
     let exoticTable = '';
     let exoticModals = '';
     let i = 1;
     for(let exotic of displayJson){
-        let exoDate = new Date(exotic.age);
-        let exoAge = Math.floor(((Date.now() - exoDate) / 86400000) / 365.25);
+        let exoDate = new Date(exotic.birthday);
+        exotic.age = Math.floor(((Date.now() - exoDate) / 86400000) / 365.25);
 
         exoticTable += `<tr class="tdRow"><td>${exotic.name}</td>
         <td>${exotic.species}</td>
         <td>${exotic.sex}</td>
-        <td>${exoAge}</td>`;
+        <td>${exotic.age}</td>`;
 
         if(exotic.owners){
             exoticTable += `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
@@ -239,28 +241,70 @@ function sortStrings(a,b){
 function sortNumbers(a,b){
     a = a[key];
     b = b[key];
-    console.log(b - a);
-    return b - a;
+    return a - b;
 }
 
 function sortBools(a,b){
+    a = a[key];
+    b = b[key];
+    if(a){return -1}
+    if(b){return 1}
+    return 0;
+}
 
+function reverseStrings(a,b){
+    a = a[key].toLowerCase();
+    b = b[key].toLowerCase();
+    return (a > b) ? -1 : 1;
+}
+
+function reverseNumbers(a,b){
+    a = a[key];
+    b = b[key];
+    return b - a;
+}
+
+function reverseBools(a,b){
+    a = a[key];
+    b = b[key];
+    if(a){return 1}
+    if(b){return -1}
+    return 0;
 }
 
 function sortRows(){
-key = $(this).attr('id');
-if($(this).attr('class') == 'numbers'){
-    displayJson.sort(sortNumbers);
-}
-else if($(this).attr('class') == 'bools'){
-    displayJson.sort(sortBools);
-}
-else{
-    displayJson.sort(sortStrings);
-}
-buildTable();
+    key = $(this).attr('id');
+    if($(this).attr('class').includes('numbers')){
+        displayJson.sort(sortNumbers);
+    }
+    else if($(this).attr('class').includes('bools')){
+        displayJson.sort(sortBools);
+    }
+    else{
+        displayJson.sort(sortStrings);
+    }
+    buildTable();
+    $('th').addClass('sort');
+    $('#'+key).removeClass('sort');
+    $('.sort').on('click',sortRows);
+    $('#'+key).on('click',reverseRows);
+
 }
 
+function reverseRows(){
+    if($('#'+key).attr('class').includes('numbers')){
+        displayJson.sort(reverseNumbers);
+    }
+    else if($('#'+key).attr('class').includes('bools')){
+        displayJson.sort(reverseBools);
+    }
+    else{
+        displayJson.sort(reverseStrings);
+    }
+    buildTable();
+    $('th').addClass('sort');
+    $('th').on('click',sortRows);
+}
 
 function reverseRowsOld(){
     let switching, x, y;
