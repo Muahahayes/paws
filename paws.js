@@ -43,7 +43,7 @@ function buildTable(){
 }
 
 function buildDog(){
-    let dogHead = '<tbody><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="size" class="numbers">Size</th><th id="licensed" class="bools">Licensed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
+    let dogHead = '<thead class="thead-dark"><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="size" class="numbers">Size</th><th id="licensed" class="bools">Licensed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr></thead><tbody>';
     let dogTable = '';
     let dogModals = '';
     let i = 1;
@@ -73,46 +73,66 @@ function buildDog(){
         dogTable += `<td>${(dog.licensed)?'Yes':'No'}</td><td>${(dog.neutered)?'Yes':'No'}</td>`;
 
         if(dog.owners){
-            dogTable += `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
+            dogTable +=`<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
+            // `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
         }
         else{
             dogTable += `<td>None</td>`;
         }
 
         if(dog.notes){
-            dogTable += `<td><button id="note${i}" class="button is-info modal-btn">Notes</button></td></tr>`;
+            dogTable +=`<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
+            // `<td><button id="note${i}" class="button is-info modal-btn">Notes</button></td></tr>`;
         }
         else{
             dogTable += `<td>None</td></tr>`;
         }
 
-        // Modals for any category that requires one, to be put at the bottom of Body
+        // Modals for any category that requires one, to be put in Modals div
         if(dog.owners){
-            dogModals += `<div class="modal" id="own${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${dog.owners}</p>
-            </div>
+            dogModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Owners List</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${dog.owners}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         if(dog.notes){
-            dogModals += `<div class="modal" id="note${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${dog.notes}</p>
-            </div>
+            dogModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${dog.notes}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         i++;
     }
     dogTable += `</tbody>`;
     dogTable = dogHead + dogTable;
-    $('.table').html(dogTable);
+    $('#table').html(dogTable);
     $('.modals').html(dogModals);
 }
 
 function buildCat(){
-    let catHead = '<tbody><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="declawed" class="bools">Declawed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
+    let catHead = '<thead class="thead-dark"><tr><th id="name">Name</th><th id="breed">Breed</th><th id="sex">Sex</th><th id="shots" class="bools">Shots</th><th id="age" class="numbers">Age</th><th id="declawed" class="bools">Declawed</th><th id="neutered" class="bools">Neutered</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr></thead><tbody>';
     let catTable = '';
     let catModals = '';
     let i = 1;
@@ -121,7 +141,6 @@ function buildCat(){
         let catDate = new Date(cat.birthday);
         cat.age = Math.floor(((Date.now() - catDate) / 86400000) / 365.25);
     
-
         catTable += `<tr class="tdRow"><td>${cat.name}</td>
         <td>${cat.breed}</td>
         <td>${cat.sex}</td>
@@ -131,44 +150,62 @@ function buildCat(){
         <td>${(cat.neutered)?'Yes':'No'}</td>`;
 
         if(cat.owners){
-            catTable += `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
+            catTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
         }
         else{
             catTable += `<td>None</td>`;
         }
         if(cat.notes){
-            catTable += `<td><button id="note${i}" class="button is-info modal-btn">Notes</button></td></tr>`;
+            catTable += `<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
         }
         else{
             catTable += `<td>None</td></tr>`;
         }
 
         if(cat.owners){
-            catModals += `<div class="modal" id="own${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${cat.owners}</p>
-            </div>
+            catModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Owners List</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${cat.owners}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         if(cat.notes){
-            catModals += `<div class="modal" id="note${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${cat.notes}</p>
-            </div>
+            catModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${cat.notes}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         i++;
     }
     catTable += `</tbody>`;
     catTable = catHead + catTable;
-    $('.table').html(catTable);
+    $('#table').html(catTable);
     $('.modals').html(catModals);
 }
 
 function buildExotic(){
-    let exoticHead = '<tbody><tr><th id="name">Name</th><th id="species">Species</th><th id="sex">Sex</th><th id="age" class="numbers">Age</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr>';
+    let exoticHead = '<thead class="thead-dark"><tr><th id="name">Name</th><th id="species">Species</th><th id="sex">Sex</th><th id="age" class="numbers">Age</th><th id="owners" class="bools">Owners</th><th id="notes" class="bools">Notes</th></tr></thead><tbody>';
     let exoticTable = '';
     let exoticModals = '';
     let i = 1;
@@ -182,55 +219,79 @@ function buildExotic(){
         <td>${exotic.age}</td>`;
 
         if(exotic.owners){
-            exoticTable += `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
+            exoticTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
         }
         else{
             exoticTable += `<td>None</td>`;
         }
         if(exotic.notes){
-            exoticTable += `<td><button id="note${i}" class="button is-info modal-btn">Notes</button></td></tr>`;
+            exoticTable += `<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
         }
         else{
             exoticTable += `<td>None</td></tr>`;
         }
 
         if(exotic.owners){
-            exoticModals += `<div class="modal" id="own${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${exotic.owners}</p>
-            </div>
+            exoticModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Owners List</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${exotic.owners}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         if(exotic.notes){
-            exoticModals += `<div class="modal" id="note${i}Modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>${exotic.notes}</p>
-            </div>
+            exoticModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${exotic.notes}</p>
+                        </div>
+                    </div>
+                </div>
             </div>`;
         }
         i++;
     }
     exoticTable += `</tbody>`;
     exoticTable = exoticHead + exoticTable;
-    $('.table').html(exoticTable);
-    $('body').append(exoticModals);
+    $('#table').html(exoticTable);
+    $('.modals').html(exoticModals);
 }
 
 function modalToggle(){
     let buttonID = $(this).attr('id');
-    let modal = $(`#${buttonID}Modal`)[0];
-    modal.style.display = 'block';
-    $(`#${buttonID}Modal .close`).on('click', function(){
-        modal.style.display = 'none';
-    });
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
+    let modalID = `#${buttonID}Modal`;
+    $(modalID).modal('toggle');
 }
+
+// function modalToggle(){
+//     let buttonID = $(this).attr('id');
+//     let modal = $(`#${buttonID}Modal`)[0];
+//     modal.style.display = 'block';
+//     $(`#${buttonID}Modal .close`).on('click', function(){
+//         modal.style.display = 'none';
+//     });
+//     window.onclick = function(event) {
+//         if (event.target == modal) {
+//             modal.style.display = 'none';
+//         }
+//     }
+// }
 
 function sortStrings(a,b){
     a = a[key].toLowerCase();
@@ -305,187 +366,3 @@ function reverseRows(){
     $('th').addClass('sort');
     $('th').on('click',sortRows);
 }
-
-function reverseRowsOld(){
-    let switching, x, y;
-    let index = $(this).attr('id');
-    switching = true;
-    if($(this).attr('class') == 'numbers'){
-        while (switching) {
-            switching = false;
-            let rows = $('.tdRow');
-            for (let row in rows) {
-                let row2 = parseInt(row) + 1;
-                if(row2 == $('.tdRow').length){break;}
-                x = rows[row].getElementsByTagName("TD")[index];
-                y = rows[row2].getElementsByTagName("TD")[index];
-                if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
-                    rows[row].parentNode.insertBefore(rows[row2], rows[row]);
-                    switching = true;
-                    break;
-                }
-            }
-        }
-    }
-    else{
-        while (switching) {
-            switching = false;
-            let rows = $('.tdRow');
-            for (let row in rows) {
-                let row2 = parseInt(row) + 1;
-                if(row2 == $('.tdRow').length){break;}
-                x = rows[row].getElementsByTagName("TD")[index];
-                y = rows[row2].getElementsByTagName("TD")[index];
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    rows[row].parentNode.insertBefore(rows[row2], rows[row]);
-                    switching = true;
-                    break;
-                }
-            }
-        }
-    }
-    $(this).on('click',sortRows);
-}
-
-function sortRowsOld(){
-    let switching, x, y;
-    let index = $(this).attr('id');
-    switching = true;
-    if($(this).attr('class') == 'numbers'){
-        while (switching) {
-            switching = false;
-            let rows = $('.tdRow');
-            for (let row in rows) {
-                let row2 = parseInt(row) + 1;
-                if(row2 == $('.tdRow').length){break;}
-                x = rows[row].getElementsByTagName("TD")[index];
-                y = rows[row2].getElementsByTagName("TD")[index];
-                if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-                    rows[row].parentNode.insertBefore(rows[row2], rows[row]);
-                    switching = true;
-                    break;
-                }
-            }
-        }
-    }
-    else{
-        while (switching) {
-            switching = false;
-            let rows = $('.tdRow');
-            for (let row in rows) {
-                let row2 = parseInt(row) + 1;
-                if(row2 == $('.tdRow').length){break;}
-                x = rows[row].getElementsByTagName("TD")[index];
-                y = rows[row2].getElementsByTagName("TD")[index];
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    rows[row].parentNode.insertBefore(rows[row2], rows[row]);
-                    switching = true;
-                    break;
-                }
-            }
-        }
-    }
-    $(this).on('click',reverseRows);
-}
-
-// var jsonPets = {
-//     'dogs':[
-//         {
-//             'name':'Cookie',
-//             'breed':'Chihuahua',
-//             'sex':'Female',
-//             'shots':true,
-//             'age':'2014-7-7',
-//             'size':'25',
-//             'licensed':false,
-//             'neutered':true,
-//             'owners':'Owners List in Future Release.',
-//             'notes':'Notes in Future Release.'
-//         },
-//         {
-//             'name':'Brooke',
-//             'breed':'Jack Russel',
-//             'sex':'Male',
-//             'shots':false,
-//             'age':'2014-7-9',
-//             'size':'15',
-//             'licensed':true,
-//             'neutered':false,
-//             'owners':'Owners List in Future Release.',
-//             'notes':'Notes in Future Release.'
-//         },
-//         {
-//             'name':'Peanut',
-//             'breed':'Terrier',
-//             'sex':'Female',
-//             'shots':true,
-//             'age':'1995-7-3',
-//             'size':'60',
-//             'licensed':false,
-//             'neutered':true,
-//             'owners':'Owners List in Future Release.',
-//             'notes':''
-//         }
-//     ],
-//     'cats':[
-//         {
-//             'name':'Sasha',
-//             'breed':'Siamese',
-//             'sex':'Male',
-//             'shots':true,
-//             'age':'2013-5-3',
-//             'declawed':false,
-//             'neutered':true,
-//             'owners':'Owners List in Future Release.',
-//             'notes':'Notes in Future Release.'
-//         },
-//         {
-//             'name':'Bella',
-//             'breed':'Russian Blue',
-//             'sex':'Female',
-//             'shots':false,
-//             'age':'2010-4-4',
-//             'declawed':true,
-//             'neutered':false,
-//             'owners':'Owners List in Future Release.',
-//             'notes':''
-//         },
-//         {
-//             'name':'Nero',
-//             'breed':'Siamese',
-//             'sex':'Male',
-//             'shots':false,
-//             'age':'2003-5-6',
-//             'declawed':true,
-//             'neutered':true,
-//             'owners':'',
-//             'notes':'Notes in Future Release.'
-//         }
-//     ],
-//     'exotics':[
-//         {
-//             'name':'Toffee',
-//             'species':'Guinea Pig',
-//             'sex':'Female',
-//             'age':'2015-7-1',
-//             'owners':'Owners List in Future Release.',
-//             'notes':'Notes in Future Release.'
-//         },
-//         {
-//             'name':'Jack',
-//             'species':'Parakeet',
-//             'sex':'Male',
-//             'age':'2015-10-5',
-//             'owners':'Owners List in Future Release.',
-//             'notes':''
-//         },
-//         {
-//             'name':'Roger',
-//             'species':'Rabbit',
-//             'sex':'Male',
-//             'age':'1997-12-5',
-//             'owners':'',
-//             'notes':'Notes in Future Release.'
-//         }
-//     ]
-// }
