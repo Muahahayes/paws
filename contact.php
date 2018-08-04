@@ -19,9 +19,7 @@
     </head>
     <body>
         <?php 
-            session_start();
-            $_SESSION["name"] = "admn";
-            
+            session_start();            
             if(isset($_SESSION["name"])){ //In final release will have user log-in for sessions and will set the name value
                 if($_SESSION["name"] == "admin"){ //vets will share an admin account, so if that account's name is on the session cookie show admin pages
                     echo('<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
