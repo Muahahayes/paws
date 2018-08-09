@@ -3,25 +3,35 @@ let displayJson = [];
 let jsonPets = [];
 let key = '';
 let filter = '';
-function callJson(){
-    $.getJSON('paws.json', function(json){ //https://raw.githubusercontent.com/Muahahayes/paws/master/paws.json
-        buildPage(json);
-    });
+function callJson(){ 
+    let species = $('body').attr('id');
+    if(species){
+        let page = $('.pages').attr('id');
+        if(!page){page = 1}
+        $.getJSON(`json.php?s=${species}&p=${page}`, function(json){
+            buildPage(json);
+        });
+    }
 }
 
 function buildPage(json){
     let species = $('body').attr('id');
+    if(!json[10]){ // check if there's not an 11th result, hide forward arrow
+        $('#forward').hide();}
+    else{ // pop the 11th, so we only display 10
+        json.pop();
+    }
     if(species == 'dog'){
-        jsonPets = _.map(json.dogs);
-        displayJson = _.map(json.dogs);
+        jsonPets = _.map(json);
+        displayJson = _.map(json);
     }
     if(species == 'cat'){        
-        jsonPets = _.map(json.cats);
-        displayJson = _.map(json.cats);
+        jsonPets = _.map(json);
+        displayJson = _.map(json);
     }
     if(species == 'exotic'){
-        jsonPets = _.map(json.exotics);
-        displayJson = _.map(json.exotics);
+        jsonPets = _.map(json);
+        displayJson = _.map(json);
     }
     buildTable();
     $('th').on('click',sortRows);
@@ -57,11 +67,11 @@ function buildDog(){
             <th id="name">Name</th>
             <th id="breed">Breed</th>
             <th id="sex">Sex</th>
-            <th id="shots" class="bools">Shots</th>
+            <th id="shots" class="numbers">Shots</th>
             <th id="age" class="numbers">Age</th>
-            <th id="size" class="numbers">Size</th>
-            <th id="licensed" class="bools">Licensed</th>
-            <th id="neutered" class="bools">Neutered</th>
+            <th id="weight" class="numbers">Size</th>
+            <th id="licensed" class="numbers">Licensed</th>
+            <th id="neutered" class="numbers">Neutered</th>
             <th id="owners" class="bools">Owners</th>
             <th id="notes" class="bools">Notes</th>
         </tr>
@@ -71,48 +81,50 @@ function buildDog(){
     let i = 1;
 
     for(let dog of displayJson){
-        let dogDate = new Date(dog.birthday);
+        let dogDate = new Date(dog.birthdate);
         dog.age = Math.floor(((Date.now() - dogDate) / 86400000) / 365.25);
 
         dogTable += `<tr class="tdRow"><td>${dog.name}</td>
         <td>${dog.breed}</td>
         <td>${dog.sex}</td>
-        <td>${(dog.shots)?'Yes':'No'}</td>
+        <td>${(dog.shots == 1)?'Yes':'No'}</td>
         <td>${dog.age}</td>`;
 
-        if(dog.size < 20){
+        if(dog.weight < 20){
             dogTable += `<td>S</td>`;
         }
-        else if(dog.size < 50){
+        else if(dog.weight < 50){
             dogTable += `<td>M</td>`;
         }
-        else if(dog.size < 100){
+        else if(dog.weight < 100){
             dogTable += `<td>L</td>`;
         }
         else{
             dogTable += `<td>G</td>`;
         }
 
-        dogTable += `<td>${(dog.licensed)?'Yes':'No'}</td><td>${(dog.neutered)?'Yes':'No'}</td>`;
+        dogTable += `<td>${(dog.licensed == 1)?'Yes':'No'}</td><td>${(dog.neutered == 1)?'Yes':'No'}</td>`;
 
-        if(dog.owners){
+        if(dog.owners[0]){
             dogTable +=`<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
-            // `<td><button id="own${i}" class="button is-info modal-btn">Owners</button></td>`
         }
         else{
             dogTable += `<td>None</td>`;
         }
 
-        if(dog.notes){
+        if(dog.notes[0]){
             dogTable +=`<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
-            // `<td><button id="note${i}" class="button is-info modal-btn">Notes</button></td></tr>`;
         }
         else{
             dogTable += `<td>None</td></tr>`;
         }
 
         // Modals for any category that requires one, to be put in Modals div
-        if(dog.owners){
+        if(dog.owners[0]){
+            let dogOwners = '';
+            for(let owner of dog.owners){
+                dogOwners += `<p>${owner.fname} ${owner.lname}</p>`;
+            }
             dogModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -123,13 +135,18 @@ function buildDog(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${dog.owners}</p>
+                            ${dogOwners}
                         </div>
                     </div>
                 </div>
             </div>`;
         }
-        if(dog.notes){
+        if(dog.notes[0]){
+            let dogNotes = '';
+            for(let note of dog.notes){
+                dogNotes += `<p>${note.vetName} (${note.date})<br>
+                            ${note.note}</p>`;
+            }
             dogModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -140,7 +157,7 @@ function buildDog(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${dog.notes}</p>
+                            <p>${dogNotes}</p>
                         </div>
                     </div>
                 </div>
@@ -168,10 +185,10 @@ function buildCat(){
             <th id="name">Name</th>
             <th id="breed">Breed</th>
             <th id="sex">Sex</th>
-            <th id="shots" class="bools">Shots</th>
+            <th id="shots" class="numbers">Shots</th>
             <th id="age" class="numbers">Age</th>
-            <th id="declawed" class="bools">Declawed</th>
-            <th id="neutered" class="bools">Neutered</th>
+            <th id="declawed" class="numbers">Declawed</th>
+            <th id="neutered" class="numbers">Neutered</th>
             <th id="owners" class="bools">Owners</th>
             <th id="notes" class="bools">Notes</th>
         </tr>
@@ -181,18 +198,18 @@ function buildCat(){
     let i = 1;
 
     for(let cat of displayJson){
-        let catDate = new Date(cat.birthday);
+        let catDate = new Date(cat.birthdate);
         cat.age = Math.floor(((Date.now() - catDate) / 86400000) / 365.25);
     
         catTable += `<tr class="tdRow"><td>${cat.name}</td>
         <td>${cat.breed}</td>
         <td>${cat.sex}</td>
-        <td>${(cat.shots)?'Yes':'No'}</td>
+        <td>${(cat.shots == 1)?'Yes':'No'}</td>
         <td>${cat.age}</td>
-        <td>${(cat.declawed)?'Yes':'No'}</td>
-        <td>${(cat.neutered)?'Yes':'No'}</td>`;
+        <td>${(cat.declawed == 1)?'Yes':'No'}</td>
+        <td>${(cat.neutered == 1)?'Yes':'No'}</td>`;
 
-        if(cat.owners){
+        if(cat.owners[0]){
             catTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
         }
         else{
@@ -205,7 +222,11 @@ function buildCat(){
             catTable += `<td>None</td></tr>`;
         }
 
-        if(cat.owners){
+        if(cat.owners[0]){
+            let catOwners = '';
+            for(let owner of cat.owners){
+                catOwners += `<p>${owner.fname} ${owner.lname}</p>`;
+            }
             catModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -216,7 +237,7 @@ function buildCat(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${cat.owners}</p>
+                            ${catOwners}
                         </div>
                     </div>
                 </div>
@@ -262,6 +283,7 @@ function buildExotic(){
             <th id="species">Species</th>
             <th id="sex">Sex</th>
             <th id="age" class="numbers">Age</th>
+            <th id="neutered" class="numbers">Neutered</th>
             <th id="owners" class="bools">Owners</th>
             <th id="notes" class="bools">Notes</th>
         </tr>
@@ -270,15 +292,16 @@ function buildExotic(){
     let exoticModals = '';
     let i = 1;
     for(let exotic of displayJson){
-        let exoDate = new Date(exotic.birthday);
+        let exoDate = new Date(exotic.birthdate);
         exotic.age = Math.floor(((Date.now() - exoDate) / 86400000) / 365.25);
 
         exoticTable += `<tr class="tdRow"><td>${exotic.name}</td>
         <td>${exotic.species}</td>
         <td>${exotic.sex}</td>
-        <td>${exotic.age}</td>`;
+        <td>${exotic.age}</td>
+        <td>${(exotic.neutered == 1)?'Yes':'No'}</td>`;
 
-        if(exotic.owners){
+        if(exotic.owners[0]){
             exoticTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
         }
         else{
@@ -291,7 +314,11 @@ function buildExotic(){
             exoticTable += `<td>None</td></tr>`;
         }
 
-        if(exotic.owners){
+        if(exotic.owners[0]){
+            let exoticOwners = '';
+            for(let owner of exotic.owners){
+                exoticOwners += `<p>${owner.fname} ${owner.lname}</p>`;
+            }
             exoticModals += `<div class="modal fade" id="own${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -302,7 +329,7 @@ function buildExotic(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${exotic.owners}</p>
+                            ${exoticOwners}
                         </div>
                     </div>
                 </div>

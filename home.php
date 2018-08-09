@@ -31,6 +31,8 @@
                         <li class="nav-item"><a class="nav-link" href="dogs.php">Dogs</a></li>
                         <li class="nav-item"><a class="nav-link" href="cats.php">Cats</a></li>
                         <li class="nav-item"><a class="nav-link" href="exotics.php">Exotics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="owners.php">Owners</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
                     </ul>
                     </div>
                     </nav>');
@@ -43,6 +45,7 @@
                         <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                         <li class="nav-item"><a class="nav-link" href="pets.php">Pets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
                     </ul>
                     </div>
                     </nav>');
@@ -55,6 +58,7 @@
                         <li class="nav-item active"><a class="nav-link" href="home.php">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
                     </ul>
                     </div>
                     </nav>');
