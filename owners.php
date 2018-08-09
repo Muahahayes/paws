@@ -45,14 +45,16 @@
     else{ //if you aren't logged in as admin or owner, redirect them
         header("Location: home.php");
     }
-
+    // ------------------------------ //
+    // ------------------------------ //
     $host="localhost";
     $port=3306;
     $socket="MySQL";
     $username="root";
     $password="";
     $dbname="paws";
-
+    // ------------------------------ //
+    // ------------------------------ //
     $con = new mysqli($host, $username, $password, $dbname, $port, $socket);
     if ($con->connect_errno) {
         die("Failed to connect to MySQL: ($con->connect_errno) $con->connect_error");
@@ -60,7 +62,7 @@
     $sql = "SELECT * FROM owners LIMIT 10 OFFSET ?"; //  WHERE ? LIKE ? ORDER BY ? ?
     $page = 1;
     $filterType = 'fname';
-    $filterLike = "^a";
+    $filterLike = "%";
     $sortBy = 'fname';
     $sortAD = 'asc';
     if(isset($_GET["p"])){
@@ -99,6 +101,31 @@
                 array_push($dogs, $dog);
             }
         $row["dogs"] = $dogs;
+
+        $cats = array();
+        $catQ = $con->query("select d.name, d.breed
+                    from cats as d
+                    inner join catsowners as do
+                    on d.id=do.catsFk
+                    where do.ownersFk='" . $row["id"] . "'
+                ");
+            while($cat = mysqli_fetch_assoc($catQ)){
+                array_push($cats, $cat);
+            }
+        $row["cats"] = $cats;
+
+        $exotics = array();
+        $exoQ = $con->query("select d.name, d.species
+                    from exotics as d
+                    inner join exoticsowners as do
+                    on d.id=do.exoticsFk
+                    where do.ownersFk='" . $row["id"] . "'
+                ");
+            while($exotic = mysqli_fetch_assoc($exoQ)){
+                array_push($exotics, $exotic);
+            }
+        $row["exotics"] = $exotics;
+
         array_push($owners, $row);
     }
     $stmt->close();
@@ -119,11 +146,52 @@
                     <th id="pets">Pets</th>
                 </tr>
             </thead><tbody>');
-
+    $i = 0;
     foreach($owners as $owner){
-        $dogPets = '';
-        foreach($owner["dogs"]as $dogP){
-            $dogPets .= '<p>' . $dogP["name"] . '</p>';
+        $pets = '';
+        $hasPets = false;
+        if(isset($owner["dogs"][0])){
+            $hasPets = true;
+            $pets .= 'Dogs:';
+            foreach($owner["dogs"] as $dogP){
+                $pets .= '<p>' . $dogP["name"] .'&nbsp' . $dogP["breed"] . '</p>';
+            }
+            $pets .= '<br>';
+        }
+        if(isset($owner["cats"][0])){
+            $hasPets = true;
+            $pets .= 'Cats:';
+            foreach($owner["cats"] as $catP){
+                $pets .= '<p>' . $catP["name"] . '&nbsp' . $catP["breed"] . '</p>';
+            }
+            $pets .= '<br>';
+        }
+        if(isset($owner["exotics"][0])){
+            $hasPets = true;
+            $pets .= 'Exotics:';
+            foreach($owner['exotics'] as $exoP){
+                $pets .= '<p>' . $exoP["name"] . '&nbsp' . $exoP["species"] . '</p>';
+            }
+        }
+        $modalBtn = 'None';
+        $modal = '';
+        if($hasPets){
+            $modalBtn = '<button type="button" class="btn btn-primary modal-btn" id="pet' . $i . '">Pets</button>';
+            $modal = '<div class="modal fade" id="pet' . $i . 'Modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pets List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ' . $pets . '
+                    </div>
+                </div>
+            </div>
+            </div>';
         }
         echo('<tr class="td-row">
         <td>' . $owner["fname"] . '</td>
@@ -133,9 +201,13 @@
         <td>' . $owner["city"] . '</td>
         <td>' . $owner["st"] . '</td>
         <td>' . $owner["zip"] . '</td>
-        <td>' . $dogPets . '</td>
-        </tr>');
-
+        <td>' . $modalBtn . '</td>
+        </tr>' . $modal);
+//<td></td>
+/*
+``
+*/
+        $i++;
     }
     echo('</tbody></table></div>');
     ?>

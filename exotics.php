@@ -32,7 +32,7 @@
     <body id="exotic">
         <?php 
             session_start();
-            if(isset($_SESSION["name"])){ //In final release will have user log-in for sessions and will set the name value
+            if(isset($_SESSION["name"])){ 
                 if($_SESSION["name"] == "admin"){ //vets will share an admin account, so if that account's name is on the session cookie show admin pages
                     echo('<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
                     <div class="container-fluid">

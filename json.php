@@ -4,13 +4,16 @@
         $petType = $petTypes;
         $petTypes .= 's';
         if($petTypes == "cats" || $petTypes == "dogs" || $petTypes == "exotics"){
+            // ------------------------------ //
+            // ------------------------------ //
             $host="localhost";
             $port=3306;
             $socket="MySQL";
             $username="root";
             $password="";
             $dbname="paws";
-
+            // ------------------------------ //
+            // ------------------------------ //
             $con = new mysqli($host, $username, $password, $dbname, $port, $socket);
             if ($con->connect_errno) {
                 die("Failed to connect to MySQL: ($con->connect_errno) $con->connect_error");

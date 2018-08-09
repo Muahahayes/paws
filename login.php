@@ -52,13 +52,16 @@
 
         $name = $_POST["username"];
         $pass = $_POST["password"];
-
+        // ------------------------------ //
+        // ------------------------------ //
         $host="localhost";
         $port=3306;
         $socket="MySQL";
         $username="root";
         $password="";
         $dbname="paws";
+        // ------------------------------ //
+        // ------------------------------ //
     
         $con = new mysqli($host, $username, $password, $dbname, $port, $socket);
         if ($con->connect_errno) {
@@ -68,7 +71,7 @@
 
         while($row = $result->fetch_row()){
             if($row[8] == $name){
-                if($row[9] == $pass){
+                if(password_verify("$pass", $row[9])){
                     $_SESSION["name"] = $name;
                     header("Location: home.php");
                     die;

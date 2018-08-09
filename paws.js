@@ -12,6 +12,9 @@ function callJson(){
             buildPage(json);
         });
     }
+    else{
+        $('.modal-btn').on('click', modalToggle);
+    }
 }
 
 function buildPage(json){
@@ -87,7 +90,7 @@ function buildDog(){
         dogTable += `<tr class="tdRow"><td>${dog.name}</td>
         <td>${dog.breed}</td>
         <td>${dog.sex}</td>
-        <td>${(dog.shots == 1)?'Yes':'No'}</td>
+        <td>${(dog.shots == 1)?'✔':'✖'}</td>
         <td>${dog.age}</td>`;
 
         if(dog.weight < 20){
@@ -103,7 +106,7 @@ function buildDog(){
             dogTable += `<td>G</td>`;
         }
 
-        dogTable += `<td>${(dog.licensed == 1)?'Yes':'No'}</td><td>${(dog.neutered == 1)?'Yes':'No'}</td>`;
+        dogTable += `<td>${(dog.licensed == 1)?'✔':'✖'}</td><td>${(dog.neutered == 1)?'✔':'✖'}</td>`;
 
         if(dog.owners[0]){
             dogTable +=`<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
@@ -204,10 +207,10 @@ function buildCat(){
         catTable += `<tr class="tdRow"><td>${cat.name}</td>
         <td>${cat.breed}</td>
         <td>${cat.sex}</td>
-        <td>${(cat.shots == 1)?'Yes':'No'}</td>
+        <td>${(cat.shots == 1)?'✔':'✖'}</td>
         <td>${cat.age}</td>
-        <td>${(cat.declawed == 1)?'Yes':'No'}</td>
-        <td>${(cat.neutered == 1)?'Yes':'No'}</td>`;
+        <td>${(cat.declawed == 1)?'✔':'✖'}</td>
+        <td>${(cat.neutered == 1)?'✔':'✖'}</td>`;
 
         if(cat.owners[0]){
             catTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;
@@ -299,7 +302,7 @@ function buildExotic(){
         <td>${exotic.species}</td>
         <td>${exotic.sex}</td>
         <td>${exotic.age}</td>
-        <td>${(exotic.neutered == 1)?'Yes':'No'}</td>`;
+        <td>${(exotic.neutered == 1)?'✔':'✖'}</td>`;
 
         if(exotic.owners[0]){
             exoticTable += `<td><button type="button" class="btn btn-primary modal-btn" id="own${i}">Owners</button></td>`;

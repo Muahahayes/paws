@@ -1,9 +1,8 @@
-# Paws to Care
+# PAWS TO CARE
 ---
-## Planned Features and Current Milestone Status
-* Log-in planned in next release. Currently the navbars respond to if you are logged in or not so the admin and owner pages are inaccessible. **In final release they will be accessible when logged in.**
-
-* MySQL is set up and populated with test data. Currently the web site doesn't query the database and is using a json for testing admin pages. **In final release the web pages will be showing paginated tables of data from the database.**
-
-* All files are now php files. Currently aside from navbars the pages are rendered client-side. **In final release the Owner's table will be rendered server-side.**
+Setting up
+* Put all files in the same folder within your Apache htdocs directory.
+* Build the MySQL database using the scripts provided in MySQL.txt (Just put those into the MySQL console and run them).
+* Replace all of the host, port, socket, username, password, and dbname values in the .php files (I marked them all with big comment lines to distinguish the block of code).
+* Make an Owner called admin in the owners table of the MySQL database and give it a password. This will be the admin log-in for the vets to access the admin pages of the site.
 ---

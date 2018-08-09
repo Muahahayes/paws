@@ -42,14 +42,16 @@
         else{ //if you aren't logged in as admin or owner, redirect them
             header("Location: home.php");
         }
-
+        // ------------------------------ //
+        // ------------------------------ //
         $host="localhost";
         $port=3306;
         $socket="MySQL";
         $username="root";
         $password="";
         $dbname="paws";
-
+        // ------------------------------ //
+        // ------------------------------ //
         $con = new mysqli($host, $username, $password, $dbname, $port, $socket);
         if ($con->connect_errno) {
             die("Failed to connect to MySQL: ($con->connect_errno) $con->connect_error");
@@ -95,7 +97,7 @@
                 <td>' . $dog["breed"] . '</td>
                 <td>' . $dog["sex"] . '</td>
                 <td>');
-                echo(($dog["shots"] == 1)?'Yes':'No');
+                echo(($dog["shots"] == 1)?'✔':'✖');
                 echo('</td>
                 <td>' . $dogAge . '</td>');
                 if($dog["weight"] < 20){
@@ -110,8 +112,8 @@
                 else{
                     echo('<td>G</td>');
                 }
-                echo(($dog["licensed"] == 1)?'<td>Yes</td>':'<td>No</td>');
-                echo(($dog["neutered"] == 1)?'<td>Yes</td>':'<td>No</td>');
+                echo(($dog["licensed"] == 1)?'<td>✔</td>':'<td>✖</td>');
+                echo(($dog["neutered"] == 1)?'<td>✔</td>':'<td>✖</td>');
                 echo('</tr>');
             }
             unset($dog);
@@ -151,11 +153,11 @@
                 <td>' . $cat["breed"] . '</td>
                 <td>' . $cat["sex"] . '</td>
                 <td>');
-                echo(($cat["shots"] == 1)?'Yes':'No');
+                echo(($cat["shots"] == 1)?'✔':'✖');
                 echo('</td>
                 <td>' . $catAge . '</td>');
-                echo(($cat["declawed"] == 1)?'<td>Yes</td>':'<td>No</td>');
-                echo(($cat["neutered"] == 1)?'<td>Yes</td>':'<td>No</td>');
+                echo(($cat["declawed"] == 1)?'<td>✔</td>':'<td>✖</td>');
+                echo(($cat["neutered"] == 1)?'<td>✔</td>':'<td>✖</td>');
                 echo('</tr>');
             }
             unset($cat);
@@ -194,7 +196,7 @@
                 <td>' . $exotic["species"] . '</td>
                 <td>' . $exotic["sex"] . '</td>
                 <td>' . $exoticAge . '</td>');
-                echo(($exotic["neutered"] == 1)?'<td>Yes</td>':'<td>No</td>');
+                echo(($exotic["neutered"] == 1)?'<td>✔</td>':'<td>✖</td>');
                 echo('</tr>');
             }
             unset($exotic);
