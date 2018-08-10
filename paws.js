@@ -218,7 +218,7 @@ function buildCat(){
         else{
             catTable += `<td>None</td>`;
         }
-        if(cat.notes){
+        if(cat.notes[0]){
             catTable += `<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
         }
         else{
@@ -246,7 +246,12 @@ function buildCat(){
                 </div>
             </div>`;
         }
-        if(cat.notes){
+        if(cat.notes[0]){
+            let catNotes = '';
+            for(let note of cat.notes){
+                catNotes += `<p>${note.vetName} (${note.date})<br>
+                            ${note.note}</p>`;
+            }
             catModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -257,7 +262,7 @@ function buildCat(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${cat.notes}</p>
+                            <p>${catNotes}</p>
                         </div>
                     </div>
                 </div>
@@ -310,7 +315,7 @@ function buildExotic(){
         else{
             exoticTable += `<td>None</td>`;
         }
-        if(exotic.notes){
+        if(exotic.notes[0]){
             exoticTable += `<td><button type="button" class="btn btn-primary modal-btn" id="note${i}">Notes</button></td></tr>`;
         }
         else{
@@ -338,7 +343,12 @@ function buildExotic(){
                 </div>
             </div>`;
         }
-        if(exotic.notes){
+        if(exotic.notes[0]){
+            let exoNotes = '';
+            for(let note of exotic.notes){
+                exoNotes += `<p>${note.vetName} (${note.date})<br>
+                            ${note.note}</p>`;
+            }
             exoticModals += `<div class="modal fade" id="note${i}Modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -349,7 +359,7 @@ function buildExotic(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>${exotic.notes}</p>
+                            <p>${exoNotes}</p>
                         </div>
                     </div>
                 </div>
